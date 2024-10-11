@@ -1,0 +1,495 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.create-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.create-button:hover {
+    background-color: #0056b3;
+}
+
+.client-table {
+    width: 100%;
+    border-collapse: collapse; /* Ensure no additional spacing between cells */
+    margin-top: 20px;
+}
+
+.client-table th, .client-table td {
+    padding: 8px;
+    text-align: left;
+}
+
+.client-table th {
+    background-color: #f2f2f2;
+}
+
+.client-table td {
+    vertical-align: middle;
+}
+
+/* Add this to reduce the space between logo and name */
+.client-table td:first-child, .client-table td:nth-child(2) {
+    padding-right: 0;
+}
+
+.client-table tr:not(:last-child) {
+    border-bottom: 1px solid #ddd; /* Ensure only the bottom border is added to each row except the last */
+}
+
+.client-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.client-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    margin-right: 10px;  /* Adjust this value to move the name closer to the logo */
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+}
+
+.back-link {
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.client-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.client-header-info {
+    flex-grow: 1;
+}
+
+.client-header-info h1 {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+}
+
+.client-header-info p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.client-id {
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #555;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tab-link {
+    color: #007bff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-bottom: 2px solid transparent;
+    margin-right: 10px;
+}
+
+.tab-link:hover {
+    text-decoration: underline;
+}
+
+.tab-link.active {
+    border-bottom: 2px solid #007bff;
+}
+
+.content h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.required {
+    color: red;
+}
+
+.password-container,
+.client-id-container {
+    display: flex;
+    align-items: center;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    color: #333;
+    flex-grow: 1;
+}
+
+input[type="text"]:read-only,
+input[type="password"]:read-only,
+textarea:read-only {
+    background-color: #e9ecef;
+}
+
+#toggle-secret,
+.copy-icon {
+    cursor: pointer;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+#toggle-secret img,
+.copy-icon img {
+    width: 20px;
+    height: 20px;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.save-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.client-name {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.client-name:hover {
+    text-decoration: underline;
+}
+
+.client-id-label {
+    color: #333;
+    margin-right: 5px;
+}
+
+.client-id-value {
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: #999; /* Greyed out */
+    font-family: monospace; /* Optional: use monospace font for better readability */
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.pagination a.active {
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+}
+
+.pagination a:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+.client-id-container {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.copy-icon {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.copy-icon img {
+    width: 16px;
+    height: 16px;
+}
+
+.client-actions {
+    margin-left: auto;
+}
+
+.more-options {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+}
+
+
+.client-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #ddd;
+    border: none;
+    margin: 10px 0;
+}
+
+.editable {
+    background-color: #fff;
+    color: #000;
+}
+
+.metadata-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.metadata-form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.metadata-form .add-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.metadata-form .add-button:hover {
+    background-color: #218838;
+}
+
+.metadata-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.metadata-table th, .metadata-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.metadata-table th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+
+.delete-metadata {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.config {
+    margin-bottom: 20px;
+}
+
+.config-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.config-label {
+    flex: 1;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.config-value {
+    display: flex;
+    align-items: center;
+    flex: 2;
+}
+
+.config-value input {
+    width: 80%;
+    padding: 10px;
+    margin-right: 5px;
+}
+
+.config-description {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 60px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+  
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+  
+  /* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Style to remove the default number input arrows */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* General styling for number inputs */
+input[type=number] {
+    width: 100%; /* Adjust as needed */
+    padding: 10px; /* Same padding as text input */
+    margin: 5px 0; /* Same margin as text input */
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    border: 1px solid #ccc; /* Same border as text input */
+    border-radius: 4px; /* Same border radius as text input */
+    font-size: 16px; /* Same font size as text input */
+}
+
+/* Focus state to match text input focus styling */
+input[type=number]:focus {
+    border-color: #66afe9; /* Color on focus */
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 8px rgba(102, 175, 233, 0.6); /* Shadow on focus */
+}
+
+/* Header styles */
+header {
+    padding: 10px 20px;
+    color: white; /* Text color for better contrast */
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.env-badge {
+    background-color: #2b6cb0; /* Default badge color */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 20px;
+}
+
+.search-input {
+    width: 200px;
+    padding: 5px;
+}
+
+.ask-guide-btn {
+    background: #2b6cb0;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.user-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}

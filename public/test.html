@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>NAME</th>
+                    <th>CLIENTID</th>
+                </tr>
+            </thead>
+            <tbody id="data">
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+        fetch('https://fakestoreapi.com/products', 
+        {
+            "method": "GET",
+        }).then(
+            response => {
+                response.json().then(
+                    data => {
+                        console.log(data);
+                        var temp = "";
+                        data.forEach((x) => {
+                            temp += "<tr>";
+                            temp += "<td>" + x.title + "</td>";
+                            temp += "<td>" + x.description + "</td>";
+                            temp += "</tr>"
+                        });
+                        document.getElementById("data").innerHTML += temp;
+                    }
+                )
+            })
+    </script>
+</body>
+</html>

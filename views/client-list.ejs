@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Clients</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <%- include('../views/partials/header.ejs') %>
+    <div class="container">
+        <h1>Applications</h1>
+        <p>Setup a mobile, web or IoT application to use Dispatcher for Authentication.</p>
+        <button class="create-button">+ Create Application</button>
+        <table class="client-table">
+            <tbody>
+                <% clients.forEach(client => { %>
+                    <div class="client-details">
+                        <tr>
+                            <td><a href="/clients/<%= client.clientId %>" class="client-name"><%= client.name %></a></td>
+                            <td>
+                                <div class="client-id-container">
+                                        <span class="client-id-label">Client ID: </span>
+                                        <span class="client-id-value"><%= client.clientId %></span>
+                                        <span class="copy-icon" title="Copy Client ID">
+                                            <img src="/copy-icon.svg" alt="Copy" class="copy-button" data-client-id=<%= client.clientId %>
+                                        </span>
+                                        <div class="client-actions">
+                                            <button class="more-options">...</button>
+                                        </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </div>
+                <% }) %>
+            </tbody>
+        </table>
+        <div class="pagination">
+            <% if (page > 1) { %>
+                <a href="/clients?page=<%= page - 1 %>&limit=<%= limit %>">Previous</a>
+            <% } %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <a href="/clients?page=<%= i %>&limit=<%= limit %>" class="<%= i === page ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+            <% if (page < totalPages) { %>
+                <a href="/clients?page=<%= page + 1 %>&limit=<%= limit %>">Next</a>
+            <% } %>
+        </div>
+        <!-- Create Application Modal -->
+        <div id="authorizeModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Authorize Machine to Machine Application</h2>
+            <p>Machine to Machine Applications require at least one authorized API. Please select an API you want to authorize for invocation from your application.</p>
+            <select>
+                <option value="">Select an API...</option>
+                <!-- Add your API options here -->
+            </select>
+            <br/><br/>
+            <button onclick="window.location.href='new-api-url'">Create New Application</button>
+            <button disabled id="authorizeBtn">Authorize</button>
+            <button id="backBtn">Back</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handle click on client names
+            document.querySelectorAll('.client-name').forEach(element => {
+                element.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const clientId = this.getAttribute('href').split('/').pop();
+                    window.location.href = `/clients/${clientId}`;
+                });
+            });
+            // Handle click on copy buttons for client IDs or create application button
+            document.addEventListener('click', function (event) {
+                if (event.target.matches('.copy-button')) {
+                    const clientId = event.target.getAttribute('data-client-id');
+                    navigator.clipboard.writeText(clientId).then(() => {
+                        alert('Client ID copied to clipboard');
+                    }).catch((err) => {
+                        console.error('Could not copy text: ', err);
+                    });
+                } else if (event.target.matches('.create-button')) {
+                    // Get the modal
+                    var modal = document.getElementById("authorizeModal");
+                    // Get the button that opens the modal
+                    var btn = document.getElementById("createApplicationBtn");
+                    // Get the <span> element that closes the modal
+                    var span = document.getElementsByClassName("close")[0];
+                    // Get the Back button
+                    var backBtn = document.getElementById("backBtn");
+                    modal.style.display = "block";
+                    // When the user clicks on <span> (x), close the modal
+                    span.onclick = function() {
+                    modal.style.display = "none";
+                    }
+                    // When the user clicks the Back button, close the modal
+                    backBtn.onclick = function() {
+                    modal.style.display = "none";
+                    }
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function(event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

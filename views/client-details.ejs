@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Details</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/clients" class="back-link">← Back to Applications</a>
+            <div class="client-header">
+                <div class="client-header-info">
+                    <h1><%= client.name %></h1>
+                    <p>Client ID: 
+                        <span class="client-id"><%= client.clientId %></span>
+                    </p>
+                </div>
+            </div>
+            <nav class="tabs">
+                <a href="#" class="tab-link active">Settings</a>
+                <a href="#" class="tab-link">Credentials</a>
+                <a href="#" class="tab-link">APIs</a>
+            </nav>
+        </div>
+        <div class="content">
+            <h2>Basic Information</h2>
+            <form id="client-details-form">
+                <div class="form-group">
+                    <label for="name">Name <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" value="<%= client.name %>" class="editable">
+                </div>
+                <div class="form-group">
+                    <label for="client-id">Client ID</label>
+                    <div class="client-id-container">
+                        <input type="text" id="client-id" name="client-id" value="<%= client.clientId %>" readonly>
+                        <span id="copy-client-id" class="copy-icon">
+                            <img src="/copy-icon.svg" alt="Copy Client ID">
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="client-secret">Client Secret</label>
+                    <div class="password-container">
+                        <input type="password" id="client-secret" name="client-secret" value="<%= client.clientSecret %>" readonly>
+                        <span id="toggle-secret" class="toggle-secret">
+                            <img src="/eye-icon.svg" alt="Show" id="eye-icon">
+                        </span>
+                        <span id="copy-secret" class="copy-icon">
+                            <img src="/copy-icon.svg" alt="Copy Client Secret">
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" class="editable"><%= client.description %></textarea>
+                </div>
+                <h2>Application URIs</h2>
+                <div class="form-group">
+                    <label for="logout-urls">Allowed Logout URLs</label>
+                    <textarea id="logout-urls" name="logout-urls" class="editable"><%= client.logoutUrls.join('\n') %></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="redirect-urls">Allowed Redirect Urls</label>
+                    <textarea id="redirect-urls" name="redirect-urls" class="editable"><%= client.redirectUrls.join('\n') %></textarea>
+                </div>
+                <h2>JWT Configuration</h2>
+                <div class="config">
+                    <p class="config-description">This setting allows you to set the lifetime of the <code>jwt_token</code> (in seconds)</p>
+                    <div class="form-group">
+                        <div class="jwt-config-value">
+                            <label for="lifetime-in-seconds">Lifetime In Seconds </label>
+                            <input type="number" id="lifetime-in-seconds" name="lifetime-in-seconds" value="<%= client.jwtConfiguration.lifetimeInSeconds %>">
+                            <span>seconds</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="secret-encoded">Secret Encoded </label>
+                        <input type="text" id="secret-encoded" name="secret-encoded" value="<%= client.jwtConfiguration.isSecretEncoded !== undefined && client.jwtConfiguration.isSecretEncoded !== null && client.jwtConfiguration.isSecretEncoded !== '' ? client.jwtConfiguration.isSecretEncoded : 'false' %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="algorithm">Algorithm </label>
+                        <input type="text" id="algorithm" name="algorithm" value="<%= client.jwtConfiguration.algorithm %>" pattern="RS256|HS256" title="Must be RS256 or HS256" required>
+                    </div>
+                </div>
+                <h2>Refresh Token Configuration</h2>
+                <div class="config">
+                    <p class="config-description">This setting allows you to set the lifetime of the <code> refresh_token</code> (in seconds)</p>
+                    <div class="form-group">
+                        <label for="rotation-type">Rotation Type </label>
+                        <input type="text" id="rotation-type" name="rotation-type" value="<%= client.refreshTokenConfiguration.rotationType %>" pattern="rotating|non-rotating" title="Must be Rotating or Non-Rotating" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="token-lifetime">Token Lifetime </label>
+                        <input type="number" id="token-lifetime" name="token-lifetime" value="<%= client.refreshTokenConfiguration.tokenLifetime %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="idle-token-lifetime">Idle Token Lifetime </label>
+                        <input type="number" id="idle-token-lifetime" name="idle-token-lifetime" value="<%= client.refreshTokenConfiguration.idleTokenLifetime %>">
+                    </div>
+                </div>
+                <h2>Metadata</h2>
+                <p class="jwt-config-description">Application metadata are custom string keys and values (max 255 characters each), set on a per application basis. Metadata is exposed in the Client object as client_metadata, and in Rules ascontext.clientMetadata</p>
+                <div class="metadata-form">
+                    <label for="new-key">Key <span class="required">*</span></label>
+                    <input type="text" id="new-key" name="new-key" placeholder="Key">
+                    <label for="new-value">Value</label>
+                    <input type="text" id="new-value" name="new-value" placeholder="Value">
+                    <button type="button" id="add-metadata" class="add-button">+ Add</button>
+                </div>
+                <table class="metadata-table">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="metadata-rows">
+                        <% client.metadata.forEach(meta => { %>
+                            <tr>
+                                <td><%= meta.name %></td>
+                                <td><%= meta.value %></td>
+                                <td><button class="delete-metadata" data-key="<%= meta.name %>">🗑️</button></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <div class="form-actions">
+                    <button type="button" id="save-changes" class="save-button">Save Changes</button>
+                    <button type="button" class="cancel-button">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Function to get the initial values of the form
+        function getInitialFormData() {
+            const form = document.getElementById('client-details-form');
+            const formData = new FormData(form);
+            return {
+                name: formData.get('name'),
+                description: formData.get('description'),
+                redirectUrls: formData.get('redirect-urls').split('\n').map(url => url.trim()).filter(url => url !== ''),
+                logoutUrls: formData.get('logout-urls').split('\n').map(url => url.trim()).filter(url => url !== ''),
+                jwtConfiguration: {
+                    lifetimeInSeconds: formData.get('lifetime-in-seconds'),
+                    algorithm: formData.get('algorithm'),
+                    secretEncoded: formData.get('secret-encoded')
+                },
+                refreshTokenConfiguration: {
+                    rotationType: formData.get('rotation-type'),
+                    tokenLifetime: formData.get('token-lifetime'),
+                    idleTokenLifetime: formData.get('idle-token-lifetime')
+                },
+                metadata: Array.from(document.querySelectorAll('#metadata-rows tr')).map(row => ({
+                    name: row.querySelector('td:first-child').textContent,
+                    value: row.querySelector('td:nth-child(2)').textContent
+                }))
+            };
+        }
+
+        // Store the initial form data when the page loads
+        const initialFormData = getInitialFormData();
+
+        // Function to get the changed form data
+        function getChangedData(initialData, currentData) {
+            const changedData = {};
+
+            // Compare each top-level field
+            for (const key in currentData) {
+                if (Array.isArray(currentData[key])) {
+                    // Compare arrays
+                    if (JSON.stringify(currentData[key]) !== JSON.stringify(initialData[key])) {
+                        changedData[key] = currentData[key];
+                    }
+                } else if (typeof currentData[key] === 'object' && currentData[key] !== null) {
+                    // Compare nested objects
+                    const nestedChanges = getChangedData(initialData[key], currentData[key]);
+                    if (Object.keys(nestedChanges).length > 0) {
+                        changedData[key] = nestedChanges;
+                    }
+                } else {
+                    // Compare primitive values
+                    if (currentData[key] !== initialData[key]) {
+                        changedData[key] = currentData[key];
+                    }
+                }
+            }
+
+            return changedData;
+        }
+        document.getElementById('toggle-secret').addEventListener('click', function() {
+            const secretField = document.getElementById('client-secret');
+            const eyeIcon = document.getElementById('eye-icon');
+            const type = secretField.getAttribute('type') === 'password' ? 'text' : 'password';
+            secretField.setAttribute('type', type);
+            eyeIcon.src = type === 'password' ? '/eye-icon.svg' : '/eye-slash-icon.svg';
+        });
+        document.getElementById('copy-secret').addEventListener('click', function() {
+            const secretField = document.getElementById('client-secret');
+            navigator.clipboard.writeText(secretField.value).then(() => {
+                alert('Client secret copied to clipboard');
+            }, (err) => {
+                console.error('Could not copy text: ', err);
+            });
+        });
+        document.getElementById('copy-client-id').addEventListener('click', function() {
+            const clientIdField = document.getElementById('client-id');
+            navigator.clipboard.writeText(clientIdField.value).then(() => {
+                alert('Client ID copied to clipboard');
+            }, (err) => {
+                console.error('Could not copy text: ', err);
+            });
+        });
+        // Add new metadata
+        document.getElementById('add-metadata').addEventListener('click', function() {
+                const keyField = document.getElementById('new-key');
+                const valueField = document.getElementById('new-value');
+                const key = keyField.value.trim();
+                const value = valueField.value.trim();
+
+                if (key === '') {
+                    alert('Key is required');
+                    return;
+                }
+
+                const tableBody = document.getElementById('metadata-rows');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${key}</td>
+                    <td>${value}</td>
+                    <td><button class="delete-metadata" data-key="${key}">🗑️</button></td>
+                `;
+                tableBody.appendChild(newRow);
+
+                // Clear input fields
+                keyField.value = '';
+                valueField.value = '';
+            });
+            // Delete metadata entry
+            document.addEventListener('click', function (event) {
+                if (event.target.matches('.delete-metadata')) {
+                    const key = event.target.getAttribute('data-key');
+                    const row = event.target.closest('tr');
+                    row.remove();
+                }
+            });
+            // Handle save changes button click
+            document.getElementById('save-changes').addEventListener('click', async function() {
+                // Get current form data
+            const currentFormData = getInitialFormData();
+            // Get only changed data
+            const changedData = getChangedData(initialFormData, currentFormData);
+            if (Object.keys(changedData).length === 0) {
+                alert('No changes detected.');
+                return;
+            }
+            try {
+                // Send PATCH request to update client details
+                const response = await fetch('/clients/${<%= client.clientId %>}', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(changedData)
+                });
+
+                if (response.ok) {
+                    alert('Client details updated successfully');
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error updating client details:', errorData);
+                    alert('Failed to update client details');
+                }
+            } catch (error) {
+                console.error('Error during PATCH request:', error);
+                alert('An error occurred while updating client details');
+            }
+            });
+    </script>
+</body>
+</html>
